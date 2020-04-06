@@ -8,11 +8,36 @@ export default class Triangle extends React.Component {
             cote1: '',
             cote2: '',
             cote3: '',
-            resultat: "Le Résultat s'affichera ici"
+            resultat: "Le Résultat s'affichera ici",
+            text_resultat: {
+                textAlign: 'center',
+                fontSize: 14,
+                color: '#F0A149',
+                marginBottom: 20,
+            },
         }
     }
 
-    _printResult(text) {
+    _printResult(text, color) {
+        switch (color) {
+            case 0:
+                this.setState({text_resultat: {
+                                    textAlign: 'center',
+                                    fontSize: 14,
+                                    color: '#F0A149',
+                                    marginBottom: 20,
+                                }});
+                break;
+            case 1:
+                this.setState({text_resultat: {
+                                    textAlign: 'center',
+                                    fontSize: 14,
+                                    color: '#4DC29D',
+                                    marginBottom: 20,
+                                }});
+                break;
+
+        }
         this.setState({resultat: text});
     }
 
@@ -20,7 +45,7 @@ export default class Triangle extends React.Component {
         console.log('onPress')
         let tab = [Number(this.state.cote1), Number(this.state.cote2), Number(this.state.cote3)];
 
-        this._printResult(`${tab[0]}; ${tab[1]}; ${tab[2]}`);
+        console.log(tab)
         let define = true;
         let valid = true;
         let invalid_values = '';
@@ -45,30 +70,30 @@ export default class Triangle extends React.Component {
         }
         if (define && valid) {
             if (tab[0] == tab[1] && tab[1] == tab[2]) {
-                this._printResult(`Un triangle équilatéral de côté ${tab[0]}`);
+                this._printResult(`Un triangle équilatéral de côté ${tab[0]}`, 1);
             } 
             else if (tab[0] == tab[1]) {
-                this._printResult(`Un triangle isocèle de côté ${tab[0]} et de base ${tab[2]}`);
+                this._printResult(`Un triangle isocèle de côté ${tab[0]} et de base ${tab[2]}`, 1);
             } else if (tab[1] == tab[2]) {
-                this._printResult(`Un triangle isocèle de côté ${tab[1]} et de base ${tab[0]}`);
+                this._printResult(`Un triangle isocèle de côté ${tab[1]} et de base ${tab[0]}`, 1);
             } else if (tab[2] == tab[0]) {
-                this._printResult(`Un triangle isocèle de côté ${tab[2]} et de base ${tab[1]}`);
+                this._printResult(`Un triangle isocèle de côté ${tab[2]} et de base ${tab[1]}`, 1);
             } 
             else if (Math.max.apply(null, tab) == tab[0] && Math.pow(tab[0], 2) == Math.pow(tab[1], 2)+Math.pow(tab[2], 2)) {
-                this._printResult(`Un triangle rectangle d'hypoténuse ${tab[0]}`);
+                this._printResult(`Un triangle rectangle d'hypoténuse ${tab[0]}`, 1);
             } else if (Math.max.apply(null, tab) == tab[1] && Math.pow(tab[1], 2) == Math.pow(tab[0], 2)+Math.pow(tab[2], 2)) {
-                this._printResult(`Un triangle rectangle d'hypoténuse ${tab[1]}`);
+                this._printResult(`Un triangle rectangle d'hypoténuse ${tab[1]}`, 1);
             } else if (Math.max.apply(null, tab) == tab[2] && Math.pow(tab[2], 2) == Math.pow(tab[1], 2)+Math.pow(tab[0], 2)) {
-                this._printResult(`Un triangle rectangle d'hypoténuse ${tab[2]}`);
+                this._printResult(`Un triangle rectangle d'hypoténuse ${tab[2]}`, 1);
             }
             
             else {
-                this._printResult(`Un triangle quelconque, Nickel tu me fais perdre mon temps !`);
+                this._printResult(`Un triangle quelconque, Nickel tu me fais perdre mon temps !`, 0);
             }
         } else if (!define) {
-            this._printResult(`Oups la case ${invalid_values}n'est pas encore définie`);
+            this._printResult(`Oups la case ${invalid_values}n'est pas encore définie`, 0);
         } else {
-            this._printResult(message);
+            this._printResult(message, 0);
         }
     }
 
@@ -92,39 +117,45 @@ export default class Triangle extends React.Component {
 
     render () {
         return (
-            <View style={styles.container}>
-                <View>
-                    <Text>Jeff & 4T</Text>
-                    <Text>Triangle</Text>
+            <View style={view_styles.container}>
+                <View style={view_styles.top}>
+                    <Text style={component_styles.text_colab}>Jeff et 4T</Text>
+                    <Text style={component_styles.text_title}>Triangle</Text>
                 </View>
                 <View>
                     <View>
-                        <Text>Entre côté 1 : </Text>
+                        <Text style={component_styles.text_cote}>Entre le côté 1 : </Text>
                         <TextInput 
                             placeholder='Valeur entière'
                             onChangeText={(text) => this._typing(text, 1)}
+                            style={component_styles.text_valeure}
+                            placeholderTextColor = '#F0A149'
                         />
                     </View>
                     <View>
-                        <Text>Entre côté 2 : </Text>
+                        <Text style={component_styles.text_cote}>Entre le côté 3 : </Text>
                         <TextInput 
                             placeholder='Valeur entière'
                             onChangeText={(text) => this._typing(text, 2)}
+                            style={component_styles.text_valeure}
+                            placeholderTextColor = '#F0A149'
                         />
                     </View>
                     <View>
-                        <Text>Entre côté 3 : </Text>
+                        <Text style={component_styles.text_cote}>Entre le côté 2 : </Text>
                         <TextInput 
                             placeholder='Valeur entière'
                             onChangeText={(text) => this._typing(text, 3)}
+                            style={component_styles.text_valeure}
+                            placeholderTextColor = '#F0A149'
                         />
                     </View>
                 </View>
-                <View>
-                    <Text>Ton triangle est : </Text>
-                    <Text>{this.state.resultat}</Text>
+                <View  sytle={view_styles.resultat}>
+                    <Text style={component_styles.text_intro_resultat}>Ton triangle est : </Text>
+                    <Text style={this.state.text_resultat}>{this.state.resultat}</Text>
                 </View>
-                <Button title='Valider' onPress={() => this._validation()}/>
+                <Button title='Valider' onPress={() => this._validation()}  color='#4DC29D'/>
             </View>
         )
     }
@@ -132,11 +163,64 @@ export default class Triangle extends React.Component {
 
 
 
-const styles = StyleSheet.create({
+const view_styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
+        flex: 1,
+        marginTop: 20,
+        backgroundColor: '#F3EAC9',
     },
-  });
+
+    top: {
+        backgroundColor: '#9C4440',
+    },
+    middle: {
+        backgroundColor: '#F3EAC9',
+    },
+    result: {
+        backgroundColor: '#fff',
+    },
+});
+
+const component_styles = StyleSheet.create({
+    text_colab: {
+        textAlign: 'right',
+        fontStyle: 'italic',
+        fontSize: 14,
+        color: '#F3EAC9',
+        marginHorizontal: 5,
+        backgroundColor: '#9C4440',
+    },
+    text_title: {
+        textAlign: 'center',
+        fontSize: 35,
+        color: '#F3EAC9',
+        marginBottom: 20,
+        backgroundColor: '#9C4440',
+    },
+    button: {
+        textAlign: 'center',
+        fontSize: 20,
+        backgroundColor: '#F3EAC9',
+    },
+    text_cote: {
+        fontSize: 14,
+        color: '#9C4440',
+        marginTop: 20,
+        marginHorizontal: 5,
+        backgroundColor: '#F3EAC9',
+    },
+    text_valeure: {
+        textAlign: 'center',
+        fontSize: 14,
+        color: '#4DC29D',
+        backgroundColor: '#F3EAC9',
+    },
+    text_intro_resultat: {
+        fontSize: 20,
+        color: '#9C4440',
+        marginTop: 20,
+        marginHorizontal: 5,
+        backgroundColor: '#F3EAC9',
+    },
+});
+
